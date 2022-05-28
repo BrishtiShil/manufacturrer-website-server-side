@@ -18,6 +18,13 @@ async function run() {
         await client.connect();
         const serviceCollection = client.db('manufacturer').collection('services');
 
+        app.get('/login', async (req, res) => {
+            const user = req.body;
+            const accesstoken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+                expiresIn: '1d'
+            });
+            res.send({ accesstoken });
+        })
 
         app.get('/service', async (req, res) => {
             const query = {};

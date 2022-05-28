@@ -16,7 +16,6 @@ async function run() {
     try {
         await client.connect();
         const serviceCollection = client.db('manufacturer').collection('services');
-        // const parchaseCollection = client.db('manufacturer').collection('parchase');
 
         app.get('/get-service', async (req, res) => {
             const query = {};
@@ -38,13 +37,14 @@ async function run() {
             const option = { upsert: true };
             const result = await serviceCollection.updateOne(filter, updateDoc, option);
             res.send(result);
-        })
+        });
 
-        // app.post('/parchase', async (req, res) => {
-        //     const parchase = req.body;
-        //     const result = await parchaseCollection.insertOne(parchase);
-        //     res.send(result);
-        // })
+        app.delete('/delete-service/:id', async (req, res) => {
+            const { id } = req.params;
+            const query = { _id: ObjectId(id) };
+            const result = await serviceCollection.deleteOne(query);
+            res.send(result);
+        });
 
     }
     finally {
